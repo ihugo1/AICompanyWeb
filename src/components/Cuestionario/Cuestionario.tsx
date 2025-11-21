@@ -1,106 +1,91 @@
 import { preguntasPrueba } from "../../constants/preguntasPrueba";
+import { validarCuestionario } from "../../helpers/validarCuestionario";
 import type { Candidato } from "../../types/Candidato";
-import type { Pregunta } from "../../types/Pregunta";
 
 interface CuestionarioProps {
   candidato: Candidato;
   setCandidato: (candidato: Candidato) => void;
-  cambiarPaso: (paso: number) => void;
+  enviarSolicitud: (candidato: Candidato) => void;
 }
 
 export const Cuestionario = ({
   candidato,
   setCandidato,
-  cambiarPaso,
+  enviarSolicitud,
 }: CuestionarioProps) => {
-  const handleRespuestaChange = (
+  /* FUCION QUE ACTUALIZA EL CANDIDATO */
+  const cambiarRespuesta = (
     campo: keyof Candidato,
     valor: string | boolean,
     tipo: string
   ) => {
     if (tipo === "checkbox") {
+      const valorStr = valor as string;
       const actuales = (candidato[campo] as string[]) || [];
-      const nuevos = actuales.includes(valor as string)
-        ? actuales.filter((v) => v !== valor)
-        : [...actuales, valor as string];
-      setCandidato({ ...candidato, [campo]: nuevos });
+
+      if (valorStr === "ninguna") {
+        const nuevos = actuales.includes("ninguna") ? [] : ["ninguna"];
+        setCandidato({ ...candidato, [campo]: nuevos });
+      } else {
+        let nuevos = actuales.filter((v) => v !== "ninguna");
+        if (nuevos.includes(valorStr)) {
+          nuevos = nuevos.filter((v) => v !== valorStr);
+        } else {
+          nuevos.push(valorStr);
+        }
+        setCandidato({ ...candidato, [campo]: nuevos });
+      }
     } else {
       setCandidato({ ...candidato, [campo]: valor });
     }
   };
 
-  const finalizarCuestionario = () => {
-    // Validación
-    for (const pregunta of preguntasPrueba) {
-      const campo = pregunta.campo;
-      const valor = candidato[campo];
+  const finalizarCuestionario = async () => {
+    if (validarCuestionario(candidato)) {
+      let puntajeObtenido = 0;
+      let puntajeMaximoPosible = 0;
+      for (const pregunta of preguntasPrueba) {
+        puntajeMaximoPosible += pregunta.max_puntaje;
+        const valor = candidato[pregunta.campo];
 
-      if (pregunta.tipo === "checkbox") {
-        if (!valor || (valor as string[]).length === 0) {
-          alert(`Por favor, responde la pregunta: "${pregunta.texto}"`);
-          return;
-        }
-      } else if (valor === undefined || valor === null || valor === "") {
-        alert(`Por favor, responde la pregunta: "${pregunta.texto}"`);
-        return;
-      }
-    }
-
-    // Cálculo de puntaje
-    let puntajeObtenido = 0;
-    let puntajeMaximoPosible = 0;
-
-    for (const pregunta of preguntasPrueba) {
-      puntajeMaximoPosible += pregunta.max_puntaje;
-      const valor = candidato[pregunta.campo];
-
-      switch (pregunta.tipo) {
-        case "select": {
-          const opcionSeleccionada = pregunta.opciones?.find(
-            (op) => op.valor === valor
-          );
-          if (opcionSeleccionada) {
-            puntajeObtenido += opcionSeleccionada.puntaje;
-          }
-          break;
-        }
-        case "checkbox": {
-          const valoresSeleccionados = valor as string[];
-          pregunta.opciones?.forEach((opcion) => {
-            if (valoresSeleccionados.includes(opcion.valor)) {
-              puntajeObtenido += opcion.puntaje;
+        switch (pregunta.tipo) {
+          case "select": {
+            const opcionSeleccionada = pregunta.opciones?.find(
+              (op) => op.valor === valor
+            );
+            if (opcionSeleccionada) {
+              puntajeObtenido += opcionSeleccionada.puntaje;
             }
-          });
-          break;
-        }
-        case "boolean": {
-          if (valor === true) {
-            puntajeObtenido += pregunta.max_puntaje;
+            break;
           }
-          break;
+          case "checkbox": {
+            const valoresSeleccionados = valor as string[];
+            pregunta.opciones?.forEach((opcion) => {
+              if (valoresSeleccionados.includes(opcion.valor)) {
+                puntajeObtenido += opcion.puntaje;
+              }
+            });
+            break;
+          }
+          case "boolean": {
+            if (valor === true) {
+              puntajeObtenido += pregunta.max_puntaje;
+            }
+            break;
+          }
+          default:
+            break;
         }
-        default:
-          break;
       }
+      const porcentaje = (puntajeObtenido / puntajeMaximoPosible) * 100;
+      const candidatoActualizado = {
+        ...candidato,
+        porcentaje_efectividad: porcentaje,
+      };
+      setCandidato(candidatoActualizado);
+
+      enviarSolicitud(candidatoActualizado);
     }
-
-    const porcentaje = (puntajeObtenido / puntajeMaximoPosible) * 100;
-
-    // Guardar el porcentaje en el estado del candidato
-    setCandidato({ ...candidato, porcentaje_efectividad: porcentaje });
-
-    const mensajeFinal = [
-      "¡Gracias! Cuestionario completado con éxito.",
-      `Puntaje Obtenido: ${puntajeObtenido}`,
-      `Puntaje Máximo Posible: ${puntajeMaximoPosible}`,
-      `Porcentaje de efectividad: ${porcentaje.toFixed(2)}%`
-    ].join("\n");
-
-    console.log("Candidato final:", { ...candidato, porcentaje_efectividad: porcentaje });
-    console.log("Puntaje:", { puntajeObtenido, puntajeMaximoPosible, porcentaje });
-    alert(mensajeFinal);
-    
-    // cambiarPaso(3);
   };
 
   return (
@@ -109,11 +94,12 @@ export const Cuestionario = ({
         <div key={pregunta.id}>
           <p>{`${index + 1}) ${pregunta.texto}`}</p>
 
+          {/* PREGUNTAS TIPO SELECT*/}
           {pregunta.tipo === "select" && (
             <select
               value={(candidato[pregunta.campo] as string) || ""}
               onChange={(e) =>
-                handleRespuestaChange(pregunta.campo, e.target.value, "select")
+                cambiarRespuesta(pregunta.campo, e.target.value, "select")
               }
             >
               <option value="">Selecciona una opción</option>
@@ -125,6 +111,7 @@ export const Cuestionario = ({
             </select>
           )}
 
+          {/* PREGUNTAS TIPO CHECKBOX*/}
           {pregunta.tipo === "checkbox" && (
             <div>
               {pregunta.opciones?.map((opcion) => (
@@ -137,11 +124,7 @@ export const Cuestionario = ({
                       (candidato[pregunta.campo] as string[]) || []
                     ).includes(opcion.valor)}
                     onChange={() =>
-                      handleRespuestaChange(
-                        pregunta.campo,
-                        opcion.valor,
-                        "checkbox"
-                      )
+                      cambiarRespuesta(pregunta.campo, opcion.valor, "checkbox")
                     }
                   />
                   <label htmlFor={`${opcion.valor}-${pregunta.id}`}>
@@ -149,9 +132,25 @@ export const Cuestionario = ({
                   </label>
                 </div>
               ))}
+              {/* Opción Ninguna */}
+              <div>
+                <input
+                  type="checkbox"
+                  id={`ninguna-${pregunta.id}`}
+                  name="ninguna"
+                  checked={(
+                    (candidato[pregunta.campo] as string[]) || []
+                  ).includes("ninguna")}
+                  onChange={() =>
+                    cambiarRespuesta(pregunta.campo, "ninguna", "checkbox")
+                  }
+                />
+                <label htmlFor={`ninguna-${pregunta.id}`}>Ninguna</label>
+              </div>
             </div>
           )}
 
+          {/* PREGUNTAS TIPO BOOLEAN*/}
           {pregunta.tipo === "boolean" && (
             <div>
               <input
@@ -160,7 +159,7 @@ export const Cuestionario = ({
                 name={`boolean-${pregunta.id}`}
                 checked={candidato[pregunta.campo] === true}
                 onChange={() =>
-                  handleRespuestaChange(pregunta.campo, true, "boolean")
+                  cambiarRespuesta(pregunta.campo, true, "boolean")
                 }
               />
               <label htmlFor={`si-${pregunta.id}`}>Sí</label>
@@ -170,31 +169,11 @@ export const Cuestionario = ({
                 name={`boolean-${pregunta.id}`}
                 checked={candidato[pregunta.campo] === false}
                 onChange={() =>
-                  handleRespuestaChange(pregunta.campo, false, "boolean")
+                  cambiarRespuesta(pregunta.campo, false, "boolean")
                 }
               />
               <label htmlFor={`no-${pregunta.id}`}>No</label>
             </div>
-          )}
-
-          {pregunta.tipo === "text" && (
-            <input
-              type="text"
-              value={(candidato[pregunta.campo] as string) || ""}
-              onChange={(e) =>
-                handleRespuestaChange(pregunta.campo, e.target.value, "text")
-              }
-            />
-          )}
-
-          {pregunta.tipo === "number" && (
-            <input
-              type="number"
-              value={(candidato[pregunta.campo] as number) || ""}
-              onChange={(e) =>
-                handleRespuestaChange(pregunta.campo, e.target.value, "number")
-              }
-            />
           )}
         </div>
       ))}

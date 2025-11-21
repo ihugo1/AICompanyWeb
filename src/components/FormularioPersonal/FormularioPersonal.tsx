@@ -1,64 +1,27 @@
 import React from "react";
 import type { Candidato } from "../../types/Candidato";
-import { useFormateador } from "../../hooks/useFormateador";
+import { validarFormulario } from "../../helpers/validarFormulario";
 
 interface FormularioProps {
-  cambiarPaso: (paso: number) => void;
+  cambiarPaso: () => void;
   candidato: Candidato;
   setCandidato: (candidato: Candidato) => void;
 }
 
-export const FormularioPersonal = ({
-  cambiarPaso,
-  candidato,
-  setCandidato,
-}: FormularioProps) => {
-  const { formatearDUI, formatearTelefono } = useFormateador();
+export const FormularioPersonal = ({ cambiarPaso, candidato, setCandidato }: FormularioProps) => {
 
   const cambiarInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    let valorProcesado = value;
-    if (name === "dui") {
-      valorProcesado = formatearDUI(value);
-    } else if (name === "telefono") {
-      valorProcesado = formatearTelefono(value);
-    }
-    setCandidato({ ...candidato, [name]: valorProcesado });
+    setCandidato({ ...candidato, [e.target.name]: e.target.value });
   };
 
-  const guardarFormulario = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validación
-    if (
-      !candidato.nombre_completo ||
-      !candidato.correo ||
-      !candidato.dui ||
-      !candidato.telefono ||
-      !candidato.fecha_nacimiento ||
-      !candidato.direccion
-    ) {
-      alert("Todos los campos son obligatorios");
-      return;
+  const guardarFormulario = () => {
+    if (validarFormulario(candidato)) {
+      cambiarPaso();
     }
-
-    if (!/^\d{8}-\d$/.test(candidato.dui)) {
-      alert("DUI debe tener el formato 12345678-9");
-      return;
-    }
-
-    if (!/^\d{4}-\d{4}$/.test(candidato.telefono)) {
-      alert("Teléfono debe tener el formato 1234-5678");
-      return;
-    }
-
-    alert("Formulario válido");
-    cambiarPaso(2);
   };
-
 
   return (
-    <form onSubmit={guardarFormulario}>
+    <div>
       <h2>Formulario de aplicación</h2>
 
       {/* NOMBRE */}
@@ -79,6 +42,7 @@ export const FormularioPersonal = ({
           type="text"
           name="dui"
           value={candidato.dui}
+          maxLength={9}
           onChange={cambiarInput}
         />
       </div>
@@ -102,6 +66,7 @@ export const FormularioPersonal = ({
           name="telefono"
           value={candidato.telefono}
           onChange={cambiarInput}
+          maxLength={8}
         />
       </div>
 
@@ -128,6 +93,6 @@ export const FormularioPersonal = ({
       </div>
 
       <button onClick={guardarFormulario}>Siguiente</button>
-    </form>
+    </div>
   );
 };
