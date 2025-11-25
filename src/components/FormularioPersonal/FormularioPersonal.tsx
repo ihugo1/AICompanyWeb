@@ -8,14 +8,18 @@ interface FormularioProps {
   setCandidato: (candidato: Candidato) => void;
 }
 
-export const FormularioPersonal = ({ cambiarPaso, candidato, setCandidato }: FormularioProps) => {
-
+export const FormularioPersonal = ({
+  cambiarPaso,
+  candidato,
+  setCandidato,
+}: FormularioProps) => {
   const cambiarInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCandidato({ ...candidato, [e.target.name]: e.target.value });
   };
 
-  const guardarFormulario = () => {
-    if (validarFormulario(candidato)) {
+  const guardarFormulario = async () => {
+    const esValido = await validarFormulario(candidato);
+    if (esValido) {
       cambiarPaso();
     }
   };

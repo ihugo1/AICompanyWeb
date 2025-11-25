@@ -5,13 +5,13 @@ import type { Candidato } from "../../types/Candidato";
 interface CuestionarioProps {
   candidato: Candidato;
   setCandidato: (candidato: Candidato) => void;
-  enviarSolicitud: (candidato: Candidato) => void;
+  cambiarPaso: () => void;
 }
 
 export const Cuestionario = ({
   candidato,
   setCandidato,
-  enviarSolicitud,
+  cambiarPaso,
 }: CuestionarioProps) => {
   /* FUCION QUE ACTUALIZA EL CANDIDATO */
   const cambiarRespuesta = (
@@ -84,7 +84,7 @@ export const Cuestionario = ({
       };
       setCandidato(candidatoActualizado);
 
-      enviarSolicitud(candidatoActualizado);
+      cambiarPaso();
     }
   };
 

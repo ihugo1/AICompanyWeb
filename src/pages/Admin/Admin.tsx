@@ -3,6 +3,7 @@ import { supabase } from "../../api/supabase.client";
 import type { Candidato, EstadoCandidato } from "../../types/Candidato";
 import { ListaCandidatos } from "../../components/ListaCandidatos/ListaCandidatos";
 import { ModalCandidato } from "../../components/ModalCandidato/ModalCandidato";
+import { useNavigate } from "react-router-dom";
 
 export const Admin = () => {
   const [candidatos, setCandidatos] = useState<Candidato[]>([]);
@@ -11,6 +12,16 @@ export const Admin = () => {
   const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(
     null,
   );
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Error logging out:", error.message);
+    } else {
+      navigate("/"); // Redirect to home page after logout
+    }
+  };
 
   const handleOpenModal = (candidato: Candidato) => {
     setSelectedCandidato(candidato);
@@ -78,7 +89,10 @@ export const Admin = () => {
 
   return (
     <div>
-      <h1>Panel de Administración</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1>Panel de Administración</h1>
+        <button onClick={handleLogout}>Cerrar Sesión</button>
+      </div>
       <h2>Lista de Candidatos</h2>
       <ListaCandidatos
         candidatos={candidatos}
