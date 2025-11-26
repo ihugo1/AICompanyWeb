@@ -1,0 +1,23 @@
+.reclutamiento{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contenedorReclutamiento{
+  width: 50%;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 992px) {
+  .contenedorReclutamiento{
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  
+}

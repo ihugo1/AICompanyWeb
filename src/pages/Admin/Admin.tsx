@@ -4,6 +4,7 @@ import type { Candidato, EstadoCandidato } from "../../types/Candidato";
 import { ListaCandidatos } from "../../components/ListaCandidatos/ListaCandidatos";
 import { ModalCandidato } from "../../components/ModalCandidato/ModalCandidato";
 import { useNavigate } from "react-router-dom";
+import styles from "./Admin.module.css";
 
 export const Admin = () => {
   const [candidatos, setCandidatos] = useState<Candidato[]>([]);
@@ -80,20 +81,20 @@ export const Admin = () => {
   }, []);
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return <div className={styles.loading}>Cargando...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className={styles.error}>Error: {error}</div>;
   }
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1>Panel de Administración</h1>
-        <button onClick={handleLogout}>Cerrar Sesión</button>
+    <div className={styles.admin}>
+      <div className={styles.header}>
+        <h1 className={styles.titulo}>Panel de Administración</h1>
+        <button className={styles.botonLogout} onClick={handleLogout}>Cerrar Sesión</button>
       </div>
-      <h2>Lista de Candidatos</h2>
+      <h2 className={styles.subtitulo}>Lista de Candidatos</h2>
       <ListaCandidatos
         candidatos={candidatos}
         onOpenModal={handleOpenModal}

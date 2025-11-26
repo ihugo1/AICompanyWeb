@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import type { Candidato } from "../types/Candidato";
 
 export const validarCuestionario = (candidato: Candidato) => {
@@ -9,7 +10,7 @@ export const validarCuestionario = (candidato: Candidato) => {
     !candidato.capacidad_mantenimiento ||
     !candidato.ubicacion_residencia
   ) {
-    alert("Por favor responda todos los campos");
+    toast.error("Por favor responda todos los campos");
     return false;
   }
   return true;

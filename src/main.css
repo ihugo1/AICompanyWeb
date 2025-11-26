@@ -4,6 +4,8 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--color-text);
 }
 
 body {
@@ -20,10 +22,30 @@ input, button, textarea, select {
   font: inherit;
 }
 
+a{
+  text-decoration: none;
+  color: inherit;
+}
+
+ul, li{
+  list-style: none;
+}
+
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
 }
 
 #root, #__next {
   isolation: isolate;
+}
+
+/* VARIABLES */
+:root{
+  --color-primary: #0046AD;
+  --color-primary-dark: #002d72;
+  --color-background: #FFFFFF;
+  --color-gray: #F2F2F2;
+  --color-text: #333333;
+
+  --border-radius: 50px;
 }

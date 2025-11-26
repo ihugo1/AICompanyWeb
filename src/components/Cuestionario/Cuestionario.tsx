@@ -1,17 +1,20 @@
 import { preguntasPrueba } from "../../constants/preguntasPrueba";
 import { validarCuestionario } from "../../helpers/validarCuestionario";
 import type { Candidato } from "../../types/Candidato";
+import styles from "./Cuestionario.module.css";
 
 interface CuestionarioProps {
   candidato: Candidato;
   setCandidato: (candidato: Candidato) => void;
   cambiarPaso: () => void;
+  volverPaso: () => void;
 }
 
 export const Cuestionario = ({
   candidato,
   setCandidato,
   cambiarPaso,
+  volverPaso,
 }: CuestionarioProps) => {
   /* FUCION QUE ACTUALIZA EL CANDIDATO */
   const cambiarRespuesta = (
@@ -89,14 +92,15 @@ export const Cuestionario = ({
   };
 
   return (
-    <div>
+    <div className={styles.cuestionario}>
       {preguntasPrueba.map((pregunta, index) => (
-        <div key={pregunta.id}>
-          <p>{`${index + 1}) ${pregunta.texto}`}</p>
+        <div key={pregunta.id} className={styles.pregunta}>
+          <p className={styles.textoPregunta}>{`${index + 1}) ${pregunta.texto}`}</p>
 
           {/* PREGUNTAS TIPO SELECT*/}
           {pregunta.tipo === "select" && (
             <select
+              className={styles.select}
               value={(candidato[pregunta.campo] as string) || ""}
               onChange={(e) =>
                 cambiarRespuesta(pregunta.campo, e.target.value, "select")
@@ -113,10 +117,11 @@ export const Cuestionario = ({
 
           {/* PREGUNTAS TIPO CHECKBOX*/}
           {pregunta.tipo === "checkbox" && (
-            <div>
+            <div className={styles.opcionesContainer}>
               {pregunta.opciones?.map((opcion) => (
-                <div key={opcion.valor}>
+                <div key={opcion.valor} className={styles.opcion}>
                   <input
+                    className={styles.checkbox}
                     type="checkbox"
                     id={`${opcion.valor}-${pregunta.id}`}
                     name={opcion.valor}
@@ -127,14 +132,15 @@ export const Cuestionario = ({
                       cambiarRespuesta(pregunta.campo, opcion.valor, "checkbox")
                     }
                   />
-                  <label htmlFor={`${opcion.valor}-${pregunta.id}`}>
+                  <label className={styles.label} htmlFor={`${opcion.valor}-${pregunta.id}`}>
                     {opcion.texto}
                   </label>
                 </div>
               ))}
               {/* Opción Ninguna */}
-              <div>
+              <div className={styles.opcion}>
                 <input
+                  className={styles.checkbox}
                   type="checkbox"
                   id={`ninguna-${pregunta.id}`}
                   name="ninguna"
@@ -145,39 +151,48 @@ export const Cuestionario = ({
                     cambiarRespuesta(pregunta.campo, "ninguna", "checkbox")
                   }
                 />
-                <label htmlFor={`ninguna-${pregunta.id}`}>Ninguna</label>
+                <label className={styles.label} htmlFor={`ninguna-${pregunta.id}`}>Ninguna</label>
               </div>
             </div>
           )}
 
           {/* PREGUNTAS TIPO BOOLEAN*/}
           {pregunta.tipo === "boolean" && (
-            <div>
-              <input
-                type="radio"
-                id={`si-${pregunta.id}`}
-                name={`boolean-${pregunta.id}`}
-                checked={candidato[pregunta.campo] === true}
-                onChange={() =>
-                  cambiarRespuesta(pregunta.campo, true, "boolean")
-                }
-              />
-              <label htmlFor={`si-${pregunta.id}`}>Sí</label>
-              <input
-                type="radio"
-                id={`no-${pregunta.id}`}
-                name={`boolean-${pregunta.id}`}
-                checked={candidato[pregunta.campo] === false}
-                onChange={() =>
-                  cambiarRespuesta(pregunta.campo, false, "boolean")
-                }
-              />
-              <label htmlFor={`no-${pregunta.id}`}>No</label>
+            <div className={styles.opcionesContainer}>
+              <div className={styles.opcion}>
+                <input
+                  className={styles.radio}
+                  type="radio"
+                  id={`si-${pregunta.id}`}
+                  name={`boolean-${pregunta.id}`}
+                  checked={candidato[pregunta.campo] === true}
+                  onChange={() =>
+                    cambiarRespuesta(pregunta.campo, true, "boolean")
+                  }
+                />
+                <label className={styles.label} htmlFor={`si-${pregunta.id}`}>Sí</label>
+              </div>
+              <div className={styles.opcion}>
+                <input
+                  className={styles.radio}
+                  type="radio"
+                  id={`no-${pregunta.id}`}
+                  name={`boolean-${pregunta.id}`}
+                  checked={candidato[pregunta.campo] === false}
+                  onChange={() =>
+                    cambiarRespuesta(pregunta.campo, false, "boolean")
+                  }
+                />
+                <label className={styles.label} htmlFor={`no-${pregunta.id}`}>No</label>
+              </div>
             </div>
           )}
         </div>
       ))}
-      <button onClick={finalizarCuestionario}>Finalizar Cuestionario</button>
+      <div className={styles.botones}>
+        <button className={styles.botonSecundario} onClick={volverPaso}>Volver</button>
+        <button className={styles.boton} onClick={finalizarCuestionario}>Siguiente</button>
+      </div>
     </div>
   );
 };

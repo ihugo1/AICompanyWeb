@@ -1,4 +1,5 @@
 import type { Candidato } from "../../types/Candidato";
+import styles from "./ModalCandidato.module.css";
 
 interface ModalCandidatoProps {
   candidato: Candidato | null;
@@ -10,71 +11,90 @@ export const ModalCandidato = ({ candidato, onClose }: ModalCandidatoProps) => {
     return null;
   }
 
+  const formatearTexto = (texto: string) => {
+    return texto.replace(/[_-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  };
+
+  const formatearArray = (array: string[]) => {
+    return array.map(item => formatearTexto(item)).join(', ');
+  };
+
+  const calcularEdad = (fechaNacimiento: string) => {
+    const hoy = new Date();
+    const nacimiento = new Date(fechaNacimiento);
+    let edad = hoy.getFullYear() - nacimiento.getFullYear();
+    const mes = hoy.getMonth() - nacimiento.getMonth();
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
+      edad--;
+    }
+    return edad;
+  };
+
   return (
-    <div onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()}>
-        <div>
-          <h2>Detalles del Candidato</h2>
-          <button onClick={onClose}>&times;</button>
+    <div className={styles.overlay} onClick={onClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.header}>
+          <h2 className={styles.titulo}>Detalles del Candidato</h2>
+          <button className={styles.botonCerrar} onClick={onClose}>&times;</button>
         </div>
-        <div>
-          <p>
+        <div className={styles.contenido}>
+          <div className={styles.campo}>
             <strong>Nombre:</strong> {candidato.nombre_completo}
-          </p>
-          <p>
+          </div>
+          <div className={styles.campo}>
             <strong>Correo:</strong> {candidato.correo}
-          </p>
-          <p>
+          </div>
+          <div className={styles.campo}>
             <strong>DUI:</strong> {candidato.dui}
-          </p>
-          <p>
+          </div>
+          <div className={styles.campo}>
             <strong>Teléfono:</strong> {candidato.telefono}
-          </p>
-          <p>
-            <strong>Fecha de Nacimiento:</strong> {candidato.fecha_nacimiento}
-          </p>
-          <p>
+          </div>
+          <div className={styles.campo}>
+            <strong>Edad:</strong> {calcularEdad(candidato.fecha_nacimiento)} años
+          </div>
+          <div className={styles.campo}>
             <strong>Dirección:</strong> {candidato.direccion}
-          </p>
-          <hr />
-          <h4>Cuestionario</h4>
-          <p>
+          </div>
+          <hr className={styles.separador} />
+          <h4 className={styles.subtitulo}>Cuestionario</h4>
+          <div className={styles.campo}>
             <strong>Experiencia:</strong> {candidato.experiencia} años
-          </p>
-          <p>
+          </div>
+          <div className={styles.campo}>
             <strong>Tareas capaces:</strong>{" "}
             {Array.isArray(candidato.tareas_capaces)
-              ? candidato.tareas_capaces.join(", ")
+              ? formatearArray(candidato.tareas_capaces)
               : ""}
-          </p>
-          <p>
+          </div>
+          <div className={styles.campo}>
             <strong>Certificado:</strong> {candidato.certificado ? "Sí" : "No"}
-          </p>
-          <p>
+          </div>
+          <div className={styles.campo}>
             <strong>Equipos capaces:</strong>{" "}
             {Array.isArray(candidato.equipos_capaces)
-              ? candidato.equipos_capaces.join(", ")
+              ? formatearArray(candidato.equipos_capaces)
               : ""}
-          </p>
-          <p>
+          </div>
+          <div className={styles.campo}>
             <strong>Capacidad de mantenimiento:</strong>{" "}
-            {candidato.capacidad_mantenimiento}
-          </p>
-          <p>
+            {formatearTexto(candidato.capacidad_mantenimiento || "")}
+          </div>
+          <div className={styles.campo}>
             <strong>Ubicación de residencia:</strong>{" "}
-            {candidato.ubicacion_residencia}
-          </p>
-          <hr />
-          <h4>Resultados</h4>
-          <p>
+            {formatearTexto(candidato.ubicacion_residencia || "")}
+          </div>
+          <hr className={styles.separador} />
+          <h4 className={styles.subtitulo}>Resultados</h4>
+          <div className={styles.campo}>
             <strong>Porcentaje de Efectividad:</strong>{" "}
             {candidato.porcentaje_efectividad?.toFixed(2)}%
-          </p>
-          <p>
-            <strong>Estado:</strong> {candidato.estado ?? "en_espera"}
-          </p>
+          </div>
+          <div className={styles.campo}>
+            <strong>Estado:</strong> {formatearTexto(candidato.estado ?? "en_espera")}
+          </div>
           {candidato.url_curriculo && (
-            <a href={candidato.url_curriculo} target="_blank" rel="noopener noreferrer">Curriculo</a>
+            <a className={styles.enlaceCurriculo} href={candidato.url_curriculo} target="_blank" rel="noopener noreferrer">Ver Currículo</a>
           )}
         </div>
       </div>

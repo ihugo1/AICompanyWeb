@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import type { Candidato } from "../types/Candidato";
 import { supabase } from "../api/supabase.client";
 
@@ -6,35 +7,35 @@ export const validarFormulario = async (
 ): Promise<boolean> => {
   // --- Validación de campos obligatorios (síncrona y rápida) ---
   if (!candidato.nombre_completo) {
-    alert("El Nombre Completo es obligatorio");
+    toast.error("El Nombre Completo es obligatorio");
     return false;
   }
   if (!candidato.correo) {
-    alert("El Correo electrónico es obligatorio");
+    toast.error("El Correo electrónico es obligatorio");
     return false;
   }
   if (!candidato.dui) {
-    alert("El Número de DUI es obligatorio");
+    toast.error("El Número de DUI es obligatorio");
     return false;
   }
   if (candidato.dui.length !== 9) {
-    alert("El DUI debe tener 9 dígitos, sin guión");
+    toast.error("El DUI debe tener 9 dígitos, sin guión");
     return false;
   }
   if (!candidato.telefono) {
-    alert("El Teléfono es obligatorio");
+    toast.error("El Teléfono es obligatorio");
     return false;
   }
   if (candidato.telefono.length !== 8) {
-    alert("Ingrese un número de teléfono válido");
+    toast.error("Ingrese un número de teléfono válido");
     return false;
   }
   if (!candidato.fecha_nacimiento) {
-    alert("El campo Fecha de Nacimiento es obligatorio");
+    toast.error("El campo Fecha de Nacimiento es obligatorio");
     return false;
   }
   if (!candidato.direccion) {
-    alert("El campo Dirección es obligatorio");
+    toast.error("El campo Dirección es obligatorio");
     return false;
   }
 
@@ -47,25 +48,25 @@ export const validarFormulario = async (
 
     if (error) {
       console.error("Error al verificar duplicados:", error.message);
-      alert(
-        "Hubo un error al validar los datos. Por favor, inténtelo de mnuevo."
+      toast.error(
+        "Hubo un error al validar los datos. Por favor, inténtelo de nuevo."
       );
       return false;
     }
 
     if (existing && existing.length > 0) {
       if (existing.some((c) => c.dui === candidato.dui)) {
-        alert("El número de DUI ingresado ya se encuentra registrado.");
+        toast.error("El número de DUI ingresado ya se encuentra registrado.");
         return false;
       }
       if (existing.some((c) => c.correo === candidato.correo)) {
-        alert("El correo electrónico ingresado ya se encuentra registrado.");
+        toast.error("El correo electrónico ingresado ya se encuentra registrado.");
         return false;
       }
     }
   } catch (err) {
     console.error("Error inesperado en la validación:", err);
-    alert("Ocurrió un error inesperado durante la validación.");
+    toast.error("Ocurrió un error inesperado durante la validación.");
     return false;
   }
 

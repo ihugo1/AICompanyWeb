@@ -1,6 +1,7 @@
 import React from "react";
 import type { Candidato } from "../../types/Candidato";
 import { validarFormulario } from "../../helpers/validarFormulario";
+import styles from "./FormularioPersonal.module.css";
 
 interface FormularioProps {
   cambiarPaso: () => void;
@@ -25,13 +26,14 @@ export const FormularioPersonal = ({
   };
 
   return (
-    <div>
-      <h2>Formulario de aplicación</h2>
+    <div className={styles.formulario}>
+      <h3 className={styles.titulo}>Formulario Personal</h3>
 
       {/* NOMBRE */}
-      <div>
-        <label>Nombre Completo</label>
+      <div className={styles.campo}>
+        <label className={styles.label}>Nombre Completo</label>
         <input
+          className={styles.input}
           type="text"
           name="nombre_completo"
           value={candidato.nombre_completo}
@@ -40,9 +42,10 @@ export const FormularioPersonal = ({
       </div>
 
       {/* DUI */}
-      <div>
-        <label>Numero de DUI</label>
+      <div className={styles.campo}>
+        <label className={styles.label}>Numero de DUI</label>
         <input
+          className={styles.input}
           type="text"
           name="dui"
           value={candidato.dui}
@@ -52,10 +55,11 @@ export const FormularioPersonal = ({
       </div>
 
       {/* CORREO */}
-      <div>
-        <label>Correo electronico</label>
+      <div className={styles.campo}>
+        <label className={styles.label}>Correo electronico</label>
         <input
-          type="mail"
+          className={styles.input}
+          type="email"
           name="correo"
           value={candidato.correo}
           onChange={cambiarInput}
@@ -63,9 +67,10 @@ export const FormularioPersonal = ({
       </div>
 
       {/* TELEFONO */}
-      <div>
-        <label>Telefono</label>
+      <div className={styles.campo}>
+        <label className={styles.label}>Telefono</label>
         <input
+          className={styles.input}
           type="text"
           name="telefono"
           value={candidato.telefono}
@@ -75,9 +80,10 @@ export const FormularioPersonal = ({
       </div>
 
       {/* FECHA NACIMIENTO */}
-      <div>
-        <label>Fecha de Nacimiento</label>
+      <div className={styles.campo}>
+        <label className={styles.label}>Fecha de Nacimiento</label>
         <input
+          className={styles.input}
           type="date"
           name="fecha_nacimiento"
           value={candidato.fecha_nacimiento}
@@ -86,9 +92,10 @@ export const FormularioPersonal = ({
       </div>
 
       {/* DIRECCION */}
-      <div>
-        <label>Dirección</label>
+      <div className={styles.campo}>
+        <label className={styles.label}>Dirección</label>
         <input
+          className={styles.input}
           type="text"
           name="direccion"
           value={candidato.direccion}
@@ -96,7 +103,7 @@ export const FormularioPersonal = ({
         />
       </div>
 
-      <button onClick={guardarFormulario}>Siguiente</button>
+      <button className={styles.boton} onClick={guardarFormulario}>Siguiente</button>
     </div>
   );
 };

@@ -1,0 +1,134 @@
+.container {
+  overflow-x: auto;
+}
+
+.filtros {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.labelFiltro {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.selectFiltro {
+  padding: 8px 12px;
+  border: 1px solid #e1e5e9;
+  border-radius: 6px;
+  font-size: 1rem;
+  min-width: 150px;
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tabla th {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.tabla td {
+  padding: 1rem;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.tabla tr:hover {
+  background-color: #f8f9fa;
+}
+
+.tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.select {
+  padding: 6px 12px;
+  border: 1px solid #e1e5e9;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  min-width: 140px;
+  font-weight: 600;
+}
+
+.estadoEspera {
+  background-color: #fff3cd;
+  color: #856404;
+  border-color: #ffeaa7;
+}
+
+.estadoEntrevista {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-color: #bee5eb;
+}
+
+.estadoContratado {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+.estadoRechazado {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+.botonDetalles {
+  padding: 8px 16px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.botonDetalles:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.sinCandidatos {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.efectividad {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .tabla th,
+  .tabla td {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .select {
+    min-width: 120px;
+    font-size: 0.8rem;
+  }
+  
+  .botonDetalles {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
