@@ -13,8 +13,8 @@ export const Header = () => {
 
 
       <ul className={styles.links}>
-        <li><a href="/">Inicio</a></li>
-        <li><a href="/reclutamiento">Reclutamiento</a></li>
+        <li><Link to="/">Reclutamiento</Link></li>
+        <li><Link to="/reclutamiento">Reclutamiento</Link></li>
       </ul>
       
     </header>
