@@ -14,10 +14,20 @@ export const FormularioPersonal = ({
   candidato,
   setCandidato,
 }: FormularioProps) => {
+
+  /* CAMBIA LOS INPUTS DE TEXTO */
   const cambiarInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCandidato({ ...candidato, [e.target.name]: e.target.value });
   };
 
+  /* CAMBIA LOS INPUTS DE NUMEROS */
+  const cambiarNumero = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const sanitizedValue = value.replace(/\D/g, "");
+    setCandidato({ ...candidato, [name]: sanitizedValue });
+  };
+
+  /* VALIDA Y CAMBIA DE PASO */
   const guardarFormulario = async () => {
     const esValido = await validarFormulario(candidato);
     if (esValido) {
@@ -38,19 +48,21 @@ export const FormularioPersonal = ({
           name="nombre_completo"
           value={candidato.nombre_completo}
           onChange={cambiarInput}
+          minLength={3}
+          maxLength={100}
         />
       </div>
 
       {/* DUI */}
       <div className={styles.campo}>
-        <label className={styles.label}>Numero de DUI</label>
+        <label className={styles.label}>Numero de DUI (Sin guión)</label>
         <input
           className={styles.input}
           type="text"
           name="dui"
           value={candidato.dui}
           maxLength={9}
-          onChange={cambiarInput}
+          onChange={cambiarNumero}
         />
       </div>
 
@@ -74,7 +86,7 @@ export const FormularioPersonal = ({
           type="text"
           name="telefono"
           value={candidato.telefono}
-          onChange={cambiarInput}
+          onChange={cambiarNumero}
           maxLength={8}
         />
       </div>
@@ -100,10 +112,14 @@ export const FormularioPersonal = ({
           name="direccion"
           value={candidato.direccion}
           onChange={cambiarInput}
+          minLength={3}
+          maxLength={100}
         />
       </div>
 
-      <button className={styles.boton} onClick={guardarFormulario}>Siguiente</button>
+      <button className={styles.boton} onClick={guardarFormulario}>
+        Siguiente
+      </button>
     </div>
   );
 };

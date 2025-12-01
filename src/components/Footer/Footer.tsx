@@ -6,7 +6,7 @@ export const Footer = () => {
       <div className={styles.container}>
         <div className={styles.seccion}>
           <h4>Contacto</h4>
-          <p>Teléfono: 2216-6064</p>
+          <p>Teléfono: 2216-9064</p>
           <p>Email: info@empresa.com</p>
         </div>
         <div className={styles.seccion}>
@@ -17,8 +17,8 @@ export const Footer = () => {
         </div>
         <div className={styles.seccion}>
           <h4>Ubicación</h4>
-          <p>El Salvador</p>
-          <p>Más de 10 años de experiencia</p>
+          <p>Resid Lomas De San Francisco No 4 J-A Antgo Cusc San Salvador, San Salvador</p>
+
         </div>
       </div>
       <div className={styles.copyright}>

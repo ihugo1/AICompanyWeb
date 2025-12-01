@@ -25,7 +25,6 @@ export const Login = () => {
     if (error) {
       setError(error.message);
     } else {
-      // Redirect to the admin page on successful login
       navigate('/admin');
     }
   };

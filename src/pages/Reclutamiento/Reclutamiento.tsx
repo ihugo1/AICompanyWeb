@@ -11,7 +11,7 @@ import styles from "./Reclutamiento.module.css"
 export const Reclutamiento = () => {
   const navigate = useNavigate();
   
-  /* ESTADO DEL CANDIDATO DE TIPO CANDIDATO */
+  /* ESTADO DEL CANDIDATO */
   const [candidato, setCandidato] = useState<Candidato>({
     nombre_completo: "",
     correo: "",
@@ -32,12 +32,6 @@ export const Reclutamiento = () => {
   /* ESTADO O PASO DEL PROCESO */
   const [paso, setPaso] = useState(1);
 
-  /* DEBUG MOSTRAR LOS CAMBIOS DEL ESTADO CANDIDATO */
-  useEffect(() => {
-    console.clear();
-    console.log(candidato);
-  }, [candidato]);
-
   /* SCROLL AL TOPE CUANDO CAMBIA EL PASO */
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -50,12 +44,12 @@ export const Reclutamiento = () => {
   ) => {
     let candidatoFinal = { ...candidatoAEnviar };
 
+
+    /* SUBE EL CURRICULO SI EXISTE PRIMERO */
     if (curriculum) {
       const filePath = `${candidatoAEnviar.dui}-${curriculum.name}`;
-
-
       console.log("Subiendo curriculo...");
-      // Subir el archivo
+      // SUBIR
       const { error: uploadError } = await supabase.storage
         .from("curriculums")
         .upload(filePath, curriculum);
@@ -66,7 +60,7 @@ export const Reclutamiento = () => {
         return;
       }
 
-      // Obtener la URL pública
+      // OBTENER Y SETTEAR LA URL DEL CURRICULUM
       const { data } = supabase.storage
         .from("curriculums")
         .getPublicUrl(filePath);

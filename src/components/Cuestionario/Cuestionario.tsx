@@ -16,7 +16,8 @@ export const Cuestionario = ({
   cambiarPaso,
   volverPaso,
 }: CuestionarioProps) => {
-  /* FUCION QUE ACTUALIZA EL CANDIDATO */
+
+  /* FUCION QUE ACTUALIZA EL CANDIDATO CUANDO SE RESPONDE EL CUESTIONARIO */
   const cambiarRespuesta = (
     campo: keyof Candidato,
     valor: string | boolean,
@@ -43,6 +44,7 @@ export const Cuestionario = ({
     }
   };
 
+  /* VALIDAR QUE EL CUESTIONARIO SE RESPONDIO ENTERO ANTES DE CAMBIAR DE PASO */
   const finalizarCuestionario = async () => {
     if (validarCuestionario(candidato)) {
       let puntajeObtenido = 0;
@@ -137,7 +139,7 @@ export const Cuestionario = ({
                   </label>
                 </div>
               ))}
-              {/* Opción Ninguna */}
+              {/* OPCION NINGUNA */}
               <div className={styles.opcion}>
                 <input
                   className={styles.checkbox}

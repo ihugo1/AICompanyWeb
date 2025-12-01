@@ -20,7 +20,7 @@ export const Admin = () => {
     if (error) {
       console.error("Error logging out:", error.message);
     } else {
-      navigate("/"); // Redirect to home page after logout
+      navigate("/"); // REDIRECIONAR DESPUES DE LOGEAR
     }
   };
 
@@ -32,6 +32,7 @@ export const Admin = () => {
     setSelectedCandidato(null);
   };
 
+  /* FUNCION QUE ACTUALIZA ESTADO DE UN CADIDATO */
   const handleEstadoChange = async (
     candidatoId: string,
     nuevoEstado: EstadoCandidato,

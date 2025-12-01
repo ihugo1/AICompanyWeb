@@ -22,6 +22,7 @@ export const ListaCandidatos = ({
     "rechazado",
   ];
 
+  // FORMATEADOR DE TEXTO
   const formatearTexto = (texto: string) => {
     return texto.replace(/[_-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
@@ -101,6 +102,7 @@ export const ListaCandidatos = ({
                   className={`${styles.select} ${getEstadoClass(candidato.estado ?? "en_espera")}`}
                   value={candidato.estado ?? "en_espera"}
                   onChange={(e) => {
+                    {/* ACTUALIZAR CANDIDATO */}
                     if (candidato.id) {
                       onEstadoChange(
                         candidato.id,

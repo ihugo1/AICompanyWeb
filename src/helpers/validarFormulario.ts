@@ -2,16 +2,20 @@ import toast from "react-hot-toast";
 import type { Candidato } from "../types/Candidato";
 import { supabase } from "../api/supabase.client";
 
-export const validarFormulario = async (
-  candidato: Candidato
-): Promise<boolean> => {
-  // --- Validación de campos obligatorios (síncrona y rápida) ---
+export const validarFormulario = async (candidato: Candidato): Promise<boolean> => {
+
+  /* VALIDACIONES DE FORMATOS DE CAMPOS */
   if (!candidato.nombre_completo) {
     toast.error("El Nombre Completo es obligatorio");
     return false;
   }
   if (!candidato.correo) {
     toast.error("El Correo electrónico es obligatorio");
+    return false;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(candidato.correo)) {
+    toast.error("El formato del correo electrónico no es válido");
     return false;
   }
   if (!candidato.dui) {
@@ -39,10 +43,10 @@ export const validarFormulario = async (
     return false;
   }
 
-  // --- Validación de duplicados en la base de datos (asíncrona) ---
+  /* VALIDACIONES DE DUPLICADOS */
   try {
     const { data: existing, error } = await supabase
-      .from("candidatos") // Usando el nombre de tu tabla/tipo
+      .from("candidatos") 
       .select("correo, dui")
       .or(`correo.eq.${candidato.correo},dui.eq.${candidato.dui}`);
 
@@ -70,6 +74,5 @@ export const validarFormulario = async (
     return false;
   }
 
-  // Si todas las validaciones pasan
   return true;
 };

@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import type { Candidato } from "../types/Candidato";
 
 export const validarCuestionario = (candidato: Candidato) => {
-  // Validación
+  // VALIDAR QUE EL CUESTIONARIO SE CONTESTO
   if (
     !candidato.experiencia ||
     !candidato.tareas_capaces ||

@@ -2,6 +2,7 @@
   background-color: var(--color-primary);
   color: var(--color-background);
   margin-top: 2rem;
+  text-align: center;
 }
 
 .container {
@@ -11,16 +12,23 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+    color: white;
 }
 
 .seccion h4 {
   margin-bottom: 1rem;
   font-size: 1.2rem;
   color: var(--color-background);
+  
 }
 
 .seccion p {
   margin: 0.5rem 0;
+  color: white;
+}
+
+.seccion{
+  color: white;
   opacity: 0.9;
 }
 

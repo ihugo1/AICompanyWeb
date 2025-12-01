@@ -19,6 +19,7 @@ export const App = () => {
   return (
     <>
       <Header />
+
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
@@ -32,6 +33,7 @@ export const App = () => {
           }
         />
       </Routes>
+
       <Footer />
       <Toaster position="top-right" />
     </>
