@@ -1,5 +1,5 @@
 .container {
-  overflow-x: auto;
+  width: 100%;
 }
 
 .filtros {
@@ -25,13 +25,17 @@
   min-width: 150px;
 }
 
+.tablaWrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 .tabla {
   width: 100%;
   border-collapse: collapse;
   background-color: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 600px;
 }
 
 .tabla th {
@@ -97,6 +101,7 @@
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.3s ease;
+  white-space: nowrap;
 }
 
 .botonDetalles:hover {
@@ -116,19 +121,62 @@
 }
 
 @media (max-width: 768px) {
-  .tabla th,
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .selectFiltro {
+    min-width: auto;
+  }
+  
+  .tabla {
+    min-width: auto;
+  }
+  
+  .tabla thead {
+    display: none;
+  }
+  
+  .tabla tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
   .tabla td {
-    padding: 0.5rem;
-    font-size: 0.9rem;
+    display: block;
+    padding: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+    padding-left: 35%;
+  }
+  
+  .tabla td:last-child {
+    border-bottom: none;
+  }
+  
+  .tabla td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0.75rem;
+    top: 0.75rem;
+    font-weight: 600;
+    color: #666;
+    width: 30%;
   }
   
   .select {
-    min-width: 120px;
-    font-size: 0.8rem;
+    width: 100%;
+    min-width: auto;
   }
   
   .botonDetalles {
-    padding: 6px 12px;
-    font-size: 0.8rem;
+    width: 100%;
+    padding: 10px;
   }
 }

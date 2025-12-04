@@ -81,52 +81,54 @@ export const ListaCandidatos = ({
           ))}
         </select>
       </div>
-      <table className={styles.tabla}>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Efectividad</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {candidatosFiltrados.map((candidato) => (
-            <tr key={candidato.id}>
-              <td>{candidato.nombre_completo}</td>
-              <td className={styles.efectividad}>
-                {candidato.porcentaje_efectividad?.toFixed(2) ?? "N/A"}%
-              </td>
-              <td>
-                <select
-                  className={`${styles.select} ${getEstadoClass(candidato.estado ?? "en_espera")}`}
-                  value={candidato.estado ?? "en_espera"}
-                  onChange={(e) => {
-                    {/* ACTUALIZAR CANDIDATO */}
-                    if (candidato.id) {
-                      onEstadoChange(
-                        candidato.id,
-                        e.target.value as EstadoCandidato,
-                      );
-                    }
-                  }}
-                >
-                  {estadosPosibles.map((estado) => (
-                    <option key={estado} value={estado}>
-                      {formatearTexto(estado)}
-                    </option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <button className={styles.botonDetalles} onClick={() => onOpenModal(candidato)}>
-                  Ver Detalles
-                </button>
-              </td>
+      <div className={styles.tablaWrapper}>
+        <table className={styles.tabla}>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Efectividad</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {candidatosFiltrados.map((candidato) => (
+              <tr key={candidato.id}>
+                <td data-label="Nombre">{candidato.nombre_completo}</td>
+                <td data-label="Efectividad" className={styles.efectividad}>
+                  {candidato.porcentaje_efectividad?.toFixed(2) ?? "N/A"}%
+                </td>
+                <td data-label="Estado">
+                  <select
+                    className={`${styles.select} ${getEstadoClass(candidato.estado ?? "en_espera")}`}
+                    value={candidato.estado ?? "en_espera"}
+                    onChange={(e) => {
+                      {/* ACTUALIZAR CANDIDATO */}
+                      if (candidato.id) {
+                        onEstadoChange(
+                          candidato.id,
+                          e.target.value as EstadoCandidato,
+                        );
+                      }
+                    }}
+                  >
+                    {estadosPosibles.map((estado) => (
+                      <option key={estado} value={estado}>
+                        {formatearTexto(estado)}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td data-label="Acciones">
+                  <button className={styles.botonDetalles} onClick={() => onOpenModal(candidato)}>
+                    Ver Detalles
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

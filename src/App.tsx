@@ -9,11 +9,19 @@ import { Admin } from "./pages/Admin/Admin";
 import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { Login } from "./pages/Login/Login";
 
+const pageTitles: Record<string, string> = {
+  "/": "AL COMPANY SV - Inicio",
+  "/login": "AL COMPANY SV - Iniciar Sesión",
+  "/reclutamiento": "AL COMPANY SV - Reclutamiento",
+  "/admin": "AL COMPANY SV - Administración"
+};
+
 export const App = () => {
   const location = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.title = pageTitles[location.pathname] || "AL COMPANY SV";
   }, [location.pathname]);
 
   return (
